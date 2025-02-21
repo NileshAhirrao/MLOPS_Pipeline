@@ -31,8 +31,8 @@ stages:
     - src/model_training.py
     - data/processed
     params:
-    - model_building.n_estimators
-    - model_building.random_stat
+    - model_training.n_estimators
+    - model_training.random_stat
     outs:
     - models/model.pkl
   model_evaluation:

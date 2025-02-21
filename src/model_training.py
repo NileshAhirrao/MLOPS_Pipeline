@@ -81,7 +81,7 @@ def train_model(X_train: np.ndarray, y_train: np.ndarray, params: dict) -> Rando
             raise ValueError("The number of samples in X_train and y_train must be the same.")
         
         logger.debug('Initializing RandomForest model with parameters: %s', params)
-        clf = RandomForestClassifier(n_estimators=params['n_estimators'], random_state=params['random_state'])
+        clf = RandomForestClassifier(n_estimators=params['n_estimators'], random_state=params['random_stat'])
         
         logger.debug('Model training started with %d samples', X_train.shape[0])
         clf.fit(X_train, y_train)
