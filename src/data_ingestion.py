@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
 import logging
+import yaml
 
 
 # Logs directory 
@@ -30,6 +31,21 @@ file_hand.setFormatter(formatter)
 logger.addHandler(console_hand)
 logger.addHandler(file_hand)
 
+def load_params(param_path:str)->dict:
+    try:
+        with open(param_path,'r') as file:
+            params=yaml.safe_load(file)
+            logger.debug(f'Parameters are retrived successfully :%s',params)
+            return params
+    except FileNotFoundError as e:
+        logger.error(f'File is not found: %s',param_path)
+        raise
+    except yaml.YAMLError as e:
+        logger.error(f'Issue with YAML File : %s',e)
+        raise
+    except Exception as e:
+        logger.error(f'Some unexpected error occured : %s',e)  
+        raise      
 
 
 def load_data(data_url:str)->pd.DataFrame:
@@ -43,21 +59,6 @@ def load_data(data_url:str)->pd.DataFrame:
     except Exception as e:
         logger.error('Unexpected error occured while loading data : %s',e)
         raise
-
-
-
-def load_data(data_url:str)->pd.DataFrame:
-    try:
-        df=pd.read_csv(data_url)
-        logger.debug('data is loaded from URL :%s',data_url)
-        return df
-    except pd.errors.ParserError as e:
-        logger.error('Failed to parse file :%s',e)
-        raise
-    except Exception as e:
-        logger.error('Unexpected error occured while loadind data: %s',e)
-        raise
-
 
 
 def Preprocess_Data(df:pd.DataFrame)->pd.DataFrame:
@@ -88,7 +89,11 @@ def Save_Data(train_data:pd.DataFrame,test_data:pd.DataFrame,data_path:str)->Non
 
 def main():
     try:
-        test_size=0.2
+        #test_size=0.2
+        params=load_params(param_path='params.yaml')
+        test_size=params['data_ingestion']['test_size']
+
+        
         data_path='https://raw.githubusercontent.com/vikashishere/Datasets/main/spam.csv'
         df=load_data(data_url=data_path)
 
