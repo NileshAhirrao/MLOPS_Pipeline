@@ -6,7 +6,7 @@ stages:
     params:
     - data_ingestion.test_size
     outs:
-    - data/raw 
+    - data/raw
   pre-processing:
     cmd: python src/pre-processing.py
     deps:
@@ -15,7 +15,7 @@ stages:
     params:
     - data_ingestion.test_size
     outs:
-    - data/interim  
+    - data/interim
   feature_enginerring:
     cmd: python src/feature_enginerring.py
     deps:
@@ -25,7 +25,7 @@ stages:
     - feature_engineering.max_features
     outs:
     - data/processed
-  model_training:  
+  model_training:
     cmd: python src/model_training.py
     deps:
     - src/model_training.py
@@ -43,3 +43,10 @@ stages:
     #params:
     metrics:
     - reports/metrics.json
+params:
+- dvclive/params.yaml
+metrics:
+- dvclive/metrics.json
+plots:
+- dvclive/plots/metrics:
+    x: step
